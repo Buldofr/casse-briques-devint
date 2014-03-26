@@ -27,7 +27,7 @@ public class ResourcesManager {
     }
 
     public void loadBitmaps() {
-        loadBitmap("screen_grid_test.png");
+        //loadBitmap("screen_grid_test.png");
     }
 
     public Bitmap getBitmap(String filename) {
