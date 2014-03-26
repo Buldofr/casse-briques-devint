@@ -2,6 +2,8 @@ package fr.unice.polytech.devint.cassebriquesdevint;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -10,11 +12,12 @@ import java.awt.image.DataBufferInt;
  * Created by Loïc GAILLARD on 12/03/14.
  */
 public class GameComponent extends Canvas implements Runnable {
-    public static final int WIDTH =320;
-    public static final int HEIGHT =  180;
+    public static final int WIDTH = 320;
+    public static final int HEIGHT = 180;
     public static final int SCALE = 2;
 
     private boolean running;
+    private final GameFrame frame;
     private Thread thread;
 
     private Game game;
@@ -22,7 +25,9 @@ public class GameComponent extends Canvas implements Runnable {
     private BufferedImage img;
     private int[] pixels;
 
-    public GameComponent() {
+    public GameComponent(final GameFrame frame) {
+        this.frame = frame;
+
         Dimension dimension = new Dimension(WIDTH*SCALE, HEIGHT*SCALE);
         setSize(dimension);
         setPreferredSize(dimension);
@@ -31,6 +36,32 @@ public class GameComponent extends Canvas implements Runnable {
 
         game = new Game();
         screen = new Screen(WIDTH, HEIGHT);
+
+        InputsHandler inputsHandler = InputsHandler.getInstance();
+        addFocusListener(inputsHandler);
+        addMouseListener(inputsHandler);
+        addMouseMotionListener(inputsHandler);
+        addKeyListener(inputsHandler);
+
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_F) {
+                    frame.toggleFullscreen();
+                    requestFocusInWindow();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
 
         img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
@@ -100,7 +131,9 @@ public class GameComponent extends Canvas implements Runnable {
     }
 
     public void tick() {
-
+        if(hasFocus()) {
+            game.tick();
+        }
     }
 
     public void render() {

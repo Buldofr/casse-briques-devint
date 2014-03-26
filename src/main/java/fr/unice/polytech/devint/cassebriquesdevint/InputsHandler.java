@@ -5,8 +5,23 @@ import java.awt.event.*;
 /**
  * Created by Loïc GAILLARD on 15/03/14.
  */
-public class InputHandler implements KeyListener, FocusListener, MouseListener, MouseMotionListener {
+public class InputsHandler implements KeyListener, FocusListener, MouseListener, MouseMotionListener {
+    private static InputsHandler instance;
 
+    public final boolean[] keys;
+
+    
+    private InputsHandler() {
+        keys = new boolean[0xFFFF];
+    }
+
+    public static InputsHandler getInstance() {
+        if(instance == null) {
+            instance = new InputsHandler();
+        }
+        return instance;
+    }
+    
 
     @Override
     public void focusGained(FocusEvent e) {
@@ -15,7 +30,9 @@ public class InputHandler implements KeyListener, FocusListener, MouseListener, 
 
     @Override
     public void focusLost(FocusEvent e) {
-
+        for(int i = 0; i < 0xFFFF; ++i) {
+            keys[i] = false;
+        }
     }
 
     @Override
@@ -25,12 +42,12 @@ public class InputHandler implements KeyListener, FocusListener, MouseListener, 
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        keys[e.getKeyCode()] = true;
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        keys[e.getKeyCode()] = false;
     }
 
     @Override
