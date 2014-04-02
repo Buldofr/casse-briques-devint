@@ -25,7 +25,7 @@ public class GameFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
-        //toggleFullscreen();
+        toggleFullscreen();
 
         gameComponent.start();
     }

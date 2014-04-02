@@ -50,12 +50,12 @@ public class ResourcesManager {
 
             Bitmap bitmap = new Bitmap(w, h);
             img.getRGB(0, 0, w, h, bitmap.pixels, 0, w);
-            /*for (int i = 0; i < bitmap.pixels.length; i++) {
+            for (int i = 0; i < bitmap.pixels.length; i++) {
                 int in = bitmap.pixels[i];
-                //int col = (in & 0xf) >> 2;
-                //if (in == 0xffff00ff) col = -1;
+                int col = (in & 0xffffff);
+                if (in == 0xffff00ff) col = -1;
                 bitmap.pixels[i] = col;
-            }*/
+            }
             bitmaps.put(filename, bitmap);
             return bitmap;
         } catch (Exception e) {

@@ -54,6 +54,12 @@ public class GameComponent extends Canvas implements Runnable {
                 if(e.getKeyCode() == KeyEvent.VK_F) {
                     frame.toggleFullscreen();
                     requestFocusInWindow();
+                } else if(e.getKeyCode() == KeyEvent.VK_ESCAPE && frame.isFullscreenMode()) {
+                    frame.toggleFullscreen();
+                    requestFocusInWindow();
+                } else if(e.getKeyCode() == KeyEvent.VK_Q) {
+                    frame.dispose();
+                    System.exit(0);
                 }
             }
 
