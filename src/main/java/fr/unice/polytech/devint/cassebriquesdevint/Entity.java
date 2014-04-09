@@ -12,8 +12,11 @@ public class Entity {
     public double width;
     public double height;
 
+    public boolean collidable;
+
     public Entity() {
         coord = new Point2d();
+        collidable = true;
     }
 
     public void think() {

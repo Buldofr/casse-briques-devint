@@ -1,5 +1,7 @@
 package fr.unice.polytech.devint.cassebriquesdevint;
 
+import fr.unice.polytech.devint.cassebriquesdevint.util.Point2d;
+
 import java.util.Random;
 
 /**

@@ -8,9 +8,9 @@ import fr.unice.polytech.devint.cassebriquesdevint.util.Point2d;
 public class Brick extends Entity {
     public boolean alive;
 
-    public Brick(Point2d coord) {
+    public Brick(Point2d coord, int id) {
         super();
-        setBitmap(ResourcesManager.getInstance().getBitmap("brick.png"));
+        setBitmap(ResourcesManager.getInstance().getBitmap("brick"+id%2+".png"));
         this.coord = coord;
         alive = true;
     }

@@ -19,8 +19,14 @@ public class Ball extends Entity {
 
     public double defaultSpeed = 2;
 
-    public Ball() {
-        setBitmap(ResourcesManager.getInstance().getBitmap("ball.png"));
+    public static final double SPEEDSHIFT = 0.2;
+
+    public Ball(boolean big) {
+        if(big) {
+            setBitmap(ResourcesManager.getInstance().getBitmap("ball_b.png"));
+        } else {
+            setBitmap(ResourcesManager.getInstance().getBitmap("ball_s.png"));
+        }
         radius = width/2;
         Paddle paddle = Game.instance.paddle;
         coord.y = paddle.coord.y-radius;
@@ -44,16 +50,21 @@ public class Ball extends Entity {
 
         if(ih.keys[KeyEvent.VK_PAGE_UP]) {
             if(!diffup) {
-                speed += 0.5;
+                speed += SPEEDSHIFT;
+                defaultSpeed += SPEEDSHIFT;
                 diffup = true;
             }
         } else {
             diffup = false;
         }if(ih.keys[KeyEvent.VK_PAGE_DOWN]) {
             if(!diffdown) {
-                speed -= 0.5;
+                speed -= SPEEDSHIFT;
+                defaultSpeed -= SPEEDSHIFT;
                 if(speed <= 0) {
                     speed = 0;
+                }
+                if(defaultSpeed <= 0) {
+                    defaultSpeed = 0;
                 }
                 diffdown = true;
             }
@@ -72,6 +83,8 @@ public class Ball extends Entity {
         if(coord.y > 200) {
             linked = true;
             speed = defaultSpeed;
+            Game.instance.multiplier = 1;
+            --Game.instance.lifes;
         }
     }
 
@@ -87,6 +100,8 @@ public class Ball extends Entity {
         Entity closestEntity = null;
         for(Entity entity : Game.entities) {
             if(entity instanceof Ball) continue;
+            if(!entity.collidable) continue;
+            if(entity instanceof Brick && !((Brick)(entity)).alive) continue;
             Collision.Collide c = Collision.interceptBall(this, entity.getBoundingBox(), speed);
             if(c != null) {
                 double dist = Vector2d.norm(new Vector2d(coord, c.point));
@@ -108,6 +123,8 @@ public class Ball extends Entity {
                 double e = coord.x - c;
                 double angle = -Math.PI/2 + e/closestEntity.width/2*Math.PI;
                 dir = new Vector2d(angle);
+
+                Game.instance.multiplier = 1;
             } else {
                 switch (closestCollide.dir) {
                     case LEFT:
@@ -125,9 +142,12 @@ public class Ball extends Entity {
                 ((Brick) closestEntity).hit();
             }
 
-            move(speed - closestDist);
+            if(speed > 0)
+                move(speed - closestDist);
+            else
+                move(closestDist - speed);
             this.speed += 0.02;
-            if(this.speed > 8) this.speed = 8;
+            if(this.speed > 80) this.speed = 8;
         } else {
             coord = p;
         }

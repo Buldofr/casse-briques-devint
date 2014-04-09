@@ -3,7 +3,6 @@ package fr.unice.polytech.devint.cassebriquesdevint;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 

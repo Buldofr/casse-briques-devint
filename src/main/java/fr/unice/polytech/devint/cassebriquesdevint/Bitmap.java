@@ -31,6 +31,23 @@ public class Bitmap {
         }
     }
 
+    public void draw(Bitmap bitmap, int xOffs, int yOffs, int xo, int yo, int w, int h, int col) {
+        for (int y = 0; y < h; y++) {
+            int yPix = y + yOffs;
+            if (yPix < 0 || yPix >= height) continue;
+
+            for (int x = 0; x < w; x++) {
+                int xPix = x + xOffs;
+                if (xPix < 0 || xPix >= width) continue;
+
+                int src = bitmap.pixels[(x + xo) + (y + yo) * bitmap.width];
+                if (src >= 0) {
+                    pixels[xPix + yPix * width] = src * col;
+                }
+            }
+        }
+    }
+
     public void fill(int x0, int y0, int width, int height, int color) {
         for (int y = y0; y < height; y++) {
             for (int x = x0; x < width; x++) {
