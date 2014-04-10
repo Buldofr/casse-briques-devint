@@ -1,6 +1,9 @@
 package fr.unice.polytech.devint.cassebriquesdevint;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
@@ -12,9 +15,11 @@ import java.util.Map;
 public class ResourcesManager {
     private static ResourcesManager instance;
     private Map<String, Bitmap> bitmaps;
+    private Map<String, Sound> sounds;
 
     private ResourcesManager() {
         bitmaps = new HashMap<>();
+        sounds = new HashMap<>();
     }
 
     public static ResourcesManager getInstance() {
@@ -27,6 +32,15 @@ public class ResourcesManager {
 
     public void loadBitmaps() {
         //loadBitmap("screen_grid_test.png");
+    }
+
+    public void cacheSounds() {
+        loadSound("brick.wav");
+        loadSound("wall.wav");
+        loadSound("paddle.wav");
+        loadSound("miss.wav");
+        loadSound("win.wav");
+        loadSound("loss.wav");
     }
 
     public Bitmap getBitmap(String filename) {
@@ -57,6 +71,31 @@ public class ResourcesManager {
             }
             bitmaps.put(filename, bitmap);
             return bitmap;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Sound getSound(String filename) {
+        Sound sound = sounds.get(filename);
+
+        if(sound == null) {
+            sound = loadSound(filename);
+        }
+
+        return sound;
+    }
+
+    private Sound loadSound(String filename) {
+        Sound sound = new Sound();
+        try {
+            File file = new File("sounds/"+filename);
+            AudioInputStream ais = AudioSystem.getAudioInputStream(file);
+            Clip clip = AudioSystem.getClip();
+            clip.open(ais);
+            sound.clip = clip;
+            sounds.put("filename", sound);
+            return sound;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

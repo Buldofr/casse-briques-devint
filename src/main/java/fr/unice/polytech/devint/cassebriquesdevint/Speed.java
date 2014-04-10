@@ -9,6 +9,7 @@ public class Speed extends Text {
 
     public Speed(Point2d coord) {
         super(coord, 0xcccccc);
+        think();
     }
 
     public void think() {

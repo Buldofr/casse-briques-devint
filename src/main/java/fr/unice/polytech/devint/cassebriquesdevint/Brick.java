@@ -16,6 +16,8 @@ public class Brick extends Entity {
     }
 
     public void hit() {
+        super.hit();
         alive = false;
+        ResourcesManager.getInstance().getSound("brick.wav").play();
     }
 }

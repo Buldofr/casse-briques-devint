@@ -20,6 +20,7 @@ public class Ball extends Entity {
     public double defaultSpeed = 2;
 
     public static final double SPEEDSHIFT = 0.2;
+    public static final double MAXSPEED = 5;
 
     public Ball(boolean big) {
         if(big) {
@@ -81,6 +82,7 @@ public class Ball extends Entity {
         }
 
         if(coord.y > 200) {
+            ResourcesManager.getInstance().getSound("miss.wav").play();
             linked = true;
             speed = defaultSpeed;
             Game.instance.multiplier = 1;
@@ -138,16 +140,14 @@ public class Ball extends Entity {
                 }
             }
 
-            if(closestEntity instanceof Brick) {
-                ((Brick) closestEntity).hit();
-            }
+            closestEntity.hit();
 
             if(speed > 0)
                 move(speed - closestDist);
             else
                 move(closestDist - speed);
             this.speed += 0.02;
-            if(this.speed > 80) this.speed = 8;
+            if(this.speed > MAXSPEED) this.speed = MAXSPEED;
         } else {
             coord = p;
         }

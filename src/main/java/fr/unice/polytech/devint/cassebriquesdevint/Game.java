@@ -27,9 +27,13 @@ public class Game {
 
     public boolean resetHolding;
 
+    public boolean end;
+
     public Game() {
         instance = this;
         entities = new ArrayList<>();
+
+        ResourcesManager.getInstance().cacheSounds();
 
         newGame();
     }
@@ -63,6 +67,8 @@ public class Game {
         lifes = 3;
         points = 0;
         multiplier = 1;
+
+        end = false;
     }
 
     public void tick() {
@@ -87,10 +93,12 @@ public class Game {
         resetHolding = false;
 
         if(nbrBricks <= 0) {
+            endGame(true);
             return;
         }
 
         if(lifes <= 0) {
+            endGame(false);
             return;
         }
 
@@ -107,8 +115,22 @@ public class Game {
                     points += 10*multiplier;
                     ++multiplier;
                 }
+            } else if(entity instanceof Points) {
+                entity.think();
             }
+        }
+    }
 
+    public void endGame(boolean victory) {
+        if(end) return;
+
+        end = true;
+        if(victory) {
+            entities.add(new WinScreen());
+            entities.add(new Points(new Point2d(320/2-30, 100)));
+        } else {
+            entities.add(new LossScreen());
+            entities.add(new Points(new Point2d(320/2-30, 100)));
         }
     }
 }

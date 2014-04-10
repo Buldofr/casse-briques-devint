@@ -32,5 +32,10 @@ public class Screen extends Bitmap {
         for(Entity entity : Game.entities) {
             entity.drawOn(this);
         }
+
+        /*fill(0,0,320,180, 0xff00ff);
+        Text t = new Text(new Point2d(0,0));
+        t.txt = "Perdu...";
+        t.drawOn(this);*/
     }
 }

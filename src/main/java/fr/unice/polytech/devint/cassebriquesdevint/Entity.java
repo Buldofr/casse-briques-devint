@@ -36,4 +36,8 @@ public class Entity {
         width = bitmap.width;
         height = bitmap.height;
     }
+
+    public void hit() {
+
+    }
 }

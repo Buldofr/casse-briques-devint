@@ -21,4 +21,9 @@ public class Wall extends Entity {
     public void drawOn(Bitmap parent) {
         //parent.draw(bitmap, (int)coord.x, (int)coord.y);
     }
+
+    public void hit() {
+        super.hit();
+        ResourcesManager.getInstance().getSound("wall.wav").play();
+    }
 }

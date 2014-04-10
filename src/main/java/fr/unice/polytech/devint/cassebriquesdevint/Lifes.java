@@ -8,7 +8,7 @@ import fr.unice.polytech.devint.cassebriquesdevint.util.Point2d;
 public class Lifes extends Text {
     public Lifes(Point2d coord) {
         super(coord, 0xCCCCCC);
-
+        think();
     }
 
     public void think() {
