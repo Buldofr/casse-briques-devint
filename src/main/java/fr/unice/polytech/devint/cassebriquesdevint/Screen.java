@@ -33,6 +33,10 @@ public class Screen extends Bitmap {
             entity.drawOn(this);
         }
 
+        for(HUDElement hudElement : Game.hud.values()) {
+            hudElement.drawOn(this);
+        }
+
         /*fill(0,0,320,180, 0xff00ff);
         Text t = new Text(new Point2d(0,0));
         t.txt = "Perdu...";

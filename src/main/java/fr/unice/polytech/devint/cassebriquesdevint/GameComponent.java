@@ -54,10 +54,10 @@ public class GameComponent extends Canvas implements Runnable {
                 if(e.getKeyCode() == KeyEvent.VK_F) {
                     frame.toggleFullscreen();
                     requestFocusInWindow();
-                } else if(e.getKeyCode() == KeyEvent.VK_ESCAPE && frame.isFullscreenMode()) {
+                /*} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE && frame.isFullscreenMode()) {
                     frame.toggleFullscreen();
                     requestFocusInWindow();
-                } else if(e.getKeyCode() == KeyEvent.VK_Q) {
+                */} else if(e.getKeyCode() == KeyEvent.VK_Q || e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     frame.dispose();
                     System.exit(0);
                 }
@@ -117,7 +117,7 @@ public class GameComponent extends Canvas implements Runnable {
 
                 tickCount++;
                 if (tickCount % 60 == 0) {
-                    System.out.println(frames + " fps");
+                    //System.out.println(frames + " fps");
                     lastTime += 1000;
                     frames = 0;
                 }

@@ -26,7 +26,7 @@ public class Paddle extends Entity {
         int dir = 0;
         if(ih.keys[KeyEvent.VK_LEFT]) dir -= 1;
         if(ih.keys[KeyEvent.VK_RIGHT]) dir += 1;
-        coord.x += 4 * dir;
+        coord.x += (4+(Game.instance.level-1)*0.05) * dir;
 
         if(coord.x < 0) coord.x = 0;
         else if(coord.x > 320-width) coord.x = 320-width;

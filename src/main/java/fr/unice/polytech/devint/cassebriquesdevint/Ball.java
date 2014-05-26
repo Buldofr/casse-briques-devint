@@ -1,6 +1,5 @@
 package fr.unice.polytech.devint.cassebriquesdevint;
 
-import com.sun.org.omg.SendingContext._CodeBaseStub;
 import fr.unice.polytech.devint.cassebriquesdevint.util.Direction;
 import fr.unice.polytech.devint.cassebriquesdevint.util.Point2d;
 import fr.unice.polytech.devint.cassebriquesdevint.util.Vector2d;
@@ -22,7 +21,7 @@ public class Ball extends Entity {
     public static final double SPEEDSHIFT = 0.2;
     public static final double MAXSPEED = 5;
 
-    public Ball(boolean big) {
+    public Ball(boolean big, int level) {
         if(big) {
             setBitmap(ResourcesManager.getInstance().getBitmap("ball_b.png"));
         } else {
@@ -33,6 +32,7 @@ public class Ball extends Entity {
         coord.y = paddle.coord.y-radius;
         coord.x = paddle.coord.x+paddle.width/2+3;
         //coord.set(320/2-radius+50, 160);
+        defaultSpeed = 2+(level-1)*0.1;
         speed = defaultSpeed;
         dir = new Vector2d(0.1,-1);
         dir.normalize();
@@ -85,8 +85,8 @@ public class Ball extends Entity {
             ResourcesManager.getInstance().getSound("miss.wav").play();
             linked = true;
             speed = defaultSpeed;
-            Game.instance.multiplier = 1;
-            --Game.instance.lifes;
+
+            Game.instance.lossLife();
         }
     }
 
@@ -126,7 +126,7 @@ public class Ball extends Entity {
                 double angle = -Math.PI/2 + e/closestEntity.width/2*Math.PI;
                 dir = new Vector2d(angle);
 
-                Game.instance.multiplier = 1;
+                Game.instance.resetMultiplier();
             } else {
                 switch (closestCollide.dir) {
                     case LEFT:

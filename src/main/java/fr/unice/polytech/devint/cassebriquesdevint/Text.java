@@ -5,7 +5,7 @@ import fr.unice.polytech.devint.cassebriquesdevint.util.Point2d;
 /**
  * Created by Loic GAILLARD on 07/04/14.
  */
-public class Text extends Entity {
+public class Text extends HUDElement {
     public Point2d coord;
     public int col;
     public String txt;
@@ -34,7 +34,6 @@ public class Text extends Entity {
         this.coord = coord;
         this.col = col;
         this.txt = txt;
-        this.collidable = false;
     }
 
     public void drawOn(Bitmap parent) {
@@ -48,7 +47,31 @@ public class Text extends Entity {
         }
     }
 
-    public void think() {
-        super.think();
+    public void update() {
+        super.update();
+    }
+
+    public String getTxt() {
+        return txt;
+    }
+
+    public void setTxt(String txt) {
+        this.txt = txt;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public Point2d getCoord() {
+        return coord;
+    }
+
+    public void setCoord(Point2d coord) {
+        this.coord = coord;
     }
 }

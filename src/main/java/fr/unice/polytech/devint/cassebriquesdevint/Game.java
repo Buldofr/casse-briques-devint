@@ -3,8 +3,7 @@ package fr.unice.polytech.devint.cassebriquesdevint;
 import fr.unice.polytech.devint.cassebriquesdevint.util.Point2d;
 
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Loïc GAILLARD on 12/03/14.
@@ -12,8 +11,12 @@ import java.util.List;
 public class Game {
     public static Game instance;
     public static List<Entity> entities;
+    public static Map<String, HUDElement> hud;
     public Ball ball;
     public Paddle paddle;
+
+    public int level;
+    public boolean levelDone;
 
     public int nbrBricks;
 
@@ -32,6 +35,7 @@ public class Game {
     public Game() {
         instance = this;
         entities = new ArrayList<>();
+        hud = new HashMap<>();
 
         ResourcesManager.getInstance().cacheSounds();
 
@@ -39,8 +43,25 @@ public class Game {
     }
 
     public void newGame() {
-        entities.clear();
+        level = 1;
+        levelDone = false;
 
+        generateLevel(level);
+
+        lifes = 3;
+        points = 0;
+        multiplier = level;
+
+        hud.put("points", new Points(new Point2d(2, 2), points));
+        hud.put("lifes", new Lifes(new Point2d(2, 172), lifes));
+        //hud.put("speed", new Speed(new Point2d(300, 172), ball.defaultSpeed));
+        hud.put("level", new Level(new Point2d(258, 2), level));
+
+        end = false;
+    }
+
+    public void generateLevel(int level) {
+        entities.clear();
         paddle = new Paddle();
         entities.add(paddle);
         entities.add(new Wall(new Point2d(-1,-1), new Point2d(0, 181)));
@@ -48,27 +69,19 @@ public class Game {
         entities.add(new Wall(new Point2d(320,-1), new Point2d(321, 181)));
 
         nbrBricks = 0;
-        for(int i = 1; i < 5; ++i) {
+        Random random = new Random(3 + level);
+        double proba = 0.5-Math.log(level)*0.08;
+        for(int i = 1; i < 8; ++i) {
             for(int j = 0; j < 10; ++j) {
-                if((j+j+3*i)%7 != 5) {
+                if(random.nextDouble() > proba) {
                     entities.add(new Brick(new Point2d(j*32, i*16), (i+j)));
                     ++nbrBricks;
                 }
             }
         }
 
-        ball = new Ball(bigBall);
+        ball = new Ball(bigBall, level);
         entities.add(ball);
-
-        entities.add(new Points(new Point2d(2,2)));
-        entities.add(new Lifes(new Point2d(2, 172)));
-        entities.add(new Speed(new Point2d(300, 172)));
-
-        lifes = 3;
-        points = 0;
-        multiplier = 1;
-
-        end = false;
     }
 
     public void tick() {
@@ -92,8 +105,13 @@ public class Game {
         }
         resetHolding = false;
 
+        if(levelDone) {
+            nextLevel();
+            return;
+        }
+
         if(nbrBricks <= 0) {
-            endGame(true);
+            levelDone = true;
             return;
         }
 
@@ -112,12 +130,33 @@ public class Game {
                 if(!((Brick) entity).alive) {
                     entities.remove(i--);
                     --nbrBricks;
-                    points += 10*multiplier;
+                    addPoints(10*multiplier);
                     ++multiplier;
                 }
-            } else if(entity instanceof Points) {
-                entity.think();
             }
+        }
+    }
+
+    public void nextLevel() {
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ++level;
+        levelDone = false;
+        if(level > 30) {
+            endGame(true);
+        }
+        generateLevel(level);
+        ++lifes;
+        multiplier = level;
+        updateHud();
+    }
+
+    private void updateHud() {
+        for(HUDElement hudElement: hud.values()) {
+            hudElement.update();
         }
     }
 
@@ -126,11 +165,25 @@ public class Game {
 
         end = true;
         if(victory) {
-            entities.add(new WinScreen());
-            entities.add(new Points(new Point2d(320/2-30, 100)));
+            hud.put("winscreen", new WinScreen()); 
         } else {
-            entities.add(new LossScreen());
-            entities.add(new Points(new Point2d(320/2-30, 100)));
+            hud.put("lossScreen", new LossScreen());
         }
+        hud.put("endPoints", new Points(new Point2d(320/2-30, 100), points));
+    }
+
+    public void resetMultiplier() {
+        multiplier = level;
+    }
+
+    public void addPoints(int points) {
+        this.points += points;
+        hud.get("points").update();
+    }
+
+    public void lossLife() {
+        resetMultiplier();
+        --lifes;
+        hud.get("lifes").update();
     }
 }

@@ -6,12 +6,17 @@ import fr.unice.polytech.devint.cassebriquesdevint.util.Point2d;
  * Created by Loic GAILLARD on 07/04/14.
  */
 public class Lifes extends Text {
-    public Lifes(Point2d coord) {
+    public Lifes(Point2d coord, int lifes) {
         super(coord, 0xCCCCCC);
-        think();
+        setLifes(lifes);
     }
 
-    public void think() {
-        txt = "Vies : "+Game.instance.lifes;
+    public void update() {
+        super.update();
+        setLifes(Game.instance.lifes);
+    }
+
+    public void setLifes(int lifes) {
+        txt = "Vies : " + lifes;
     }
 }

@@ -7,13 +7,17 @@ import fr.unice.polytech.devint.cassebriquesdevint.util.Point2d;
  */
 public class Speed extends Text {
 
-    public Speed(Point2d coord) {
+    public Speed(Point2d coord, double speed) {
         super(coord, 0xcccccc);
-        think();
+        setSpeed(speed);
     }
 
-    public void think() {
-        super.think();
-        txt = String.format("%.1f", Game.instance.ball.defaultSpeed);
+    public void update() {
+        super.update();
+        setSpeed(Game.instance.ball.defaultSpeed);
+    }
+
+    public void setSpeed(double speed) {
+        txt = String.format("%.1f", speed);
     }
 }

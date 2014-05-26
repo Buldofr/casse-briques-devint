@@ -94,7 +94,7 @@ public class ResourcesManager {
             Clip clip = AudioSystem.getClip();
             clip.open(ais);
             sound.clip = clip;
-            sounds.put("filename", sound);
+            sounds.put(filename, sound);
             return sound;
         } catch (Exception e) {
             throw new RuntimeException(e);
